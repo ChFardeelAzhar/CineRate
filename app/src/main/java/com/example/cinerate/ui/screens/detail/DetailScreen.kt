@@ -1,6 +1,8 @@
 package com.example.cinerate.ui.screens.detail
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -16,9 +18,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.example.cinerate.R
 import com.example.cinerate.ui.components.*
 import com.example.cinerate.ui.theme.Background
 import com.example.cinerate.ui.theme.SecondaryText
@@ -30,6 +35,17 @@ fun DetailScreen(
 ) {
     val uiState by viewModel.uiState.collectAsState()
     val movie = uiState.movie ?: return
+
+
+    val imageRes = when(movie.posterRes){
+        0 -> R.drawable.movie
+        1 -> R.drawable.movie_2
+        2 -> R.drawable.movie_3
+        3 -> R.drawable.movie_2
+        4 -> R.drawable.movie
+        5 -> R.drawable.movie_3
+        else -> R.drawable.movie
+    }
 
     Box(modifier = Modifier.fillMaxSize().background(Background)) {
         LazyColumn(
@@ -57,7 +73,13 @@ fun DetailScreen(
                         ),
                         contentAlignment = Alignment.Center
                     ) {
-                        Text("🎬", style = MaterialTheme.typography.displayLarge)
+                        Image(
+                            painter = painterResource(imageRes),
+                            contentDescription = "movie",
+                            modifier = Modifier.fillMaxSize(),
+                            contentScale = ContentScale.Crop
+                        )
+
                     }
                 }
             }
@@ -108,7 +130,6 @@ fun DetailScreen(
 
                     SectionHeader(
                         title = "Reviews",
-                        actionText = "See all",
                         onActionClick = { /* TODO */ }
                     )
 
@@ -130,9 +151,10 @@ fun DetailScreen(
             modifier = Modifier
                 .statusBarsPadding()
                 .padding(horizontal = 22.dp)
-                .size(40.dp)
+                .size(20.dp)
                 .clip(CircleShape)
                 .background(Color.Black.copy(alpha = 0.5f))
+                .clickable{onBackClick()}
         ) {
             Icon(
                 imageVector = Icons.Rounded.ArrowBackIosNew,

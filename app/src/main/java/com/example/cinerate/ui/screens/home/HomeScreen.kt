@@ -1,5 +1,7 @@
 package com.example.cinerate.ui.screens.home
 
+import androidx.compose.foundation.Image
+import com.example.cinerate.R
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -16,6 +18,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.cinerate.ui.components.GenreChip
@@ -40,12 +43,16 @@ fun HomeScreen(
                     Row(verticalAlignment = Alignment.CenterVertically) {
                         Box(
                             modifier = Modifier
-                                .size(32.dp)
+                                .size(35.dp)
                                 .clip(RoundedCornerShape(8.dp))
                                 .background(GoldAccent),
                             contentAlignment = Alignment.Center
                         ) {
-                            Text("🎬", style = MaterialTheme.typography.titleMedium)
+                            Image(
+                                painter = painterResource(id = R.drawable.film_strip_),
+                                contentDescription = "App Logo",
+                                modifier = Modifier.size(22.dp)
+                            )
                         }
                         Spacer(modifier = Modifier.width(12.dp))
                         Text(
@@ -88,7 +95,7 @@ fun HomeScreen(
                 }
             }
 
-            Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.height(8.dp))
 
             // Movie List
             LazyColumn(
@@ -119,7 +126,7 @@ fun SearchBar(
         onValueChange = onQueryChange,
         modifier = modifier
             .fillMaxWidth()
-            .heightIn(min = 56.dp)
+            .heightIn(min = 46.dp)
             .clip(RoundedCornerShape(28.dp)),
         placeholder = {
             Text(

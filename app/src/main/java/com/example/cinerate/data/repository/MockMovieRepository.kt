@@ -32,7 +32,7 @@ class MockMovieRepository @Inject constructor() : MovieRepository {
             reviewCount = "2.8M",
             ageRating = "PG-13",
             description = "When the menace known as the Joker wreaks havoc and chaos on the people of Gotham, Batman must accept one of the greatest psychological and physical tests of his ability to fight injustice.",
-            posterRes = 0,
+            posterRes = 1,
             isTopRated = true
         ),
         Movie(
@@ -45,7 +45,7 @@ class MockMovieRepository @Inject constructor() : MovieRepository {
             reviewCount = "600K",
             ageRating = "R",
             description = "The story of American scientist J. Robert Oppenheimer and his role in the development of the atomic bomb.",
-            posterRes = 0,
+            posterRes = 2,
             isTopRated = true
         ),
         Movie(
@@ -58,7 +58,7 @@ class MockMovieRepository @Inject constructor() : MovieRepository {
             reviewCount = "2.5M",
             ageRating = "PG-13",
             description = "A thief who steals corporate secrets through the use of dream-sharing technology is given the inverse task of planting an idea into the mind of a C.E.O.",
-            posterRes = 0,
+            posterRes = 3,
             isTopRated = true
         ),
         Movie(
@@ -71,7 +71,7 @@ class MockMovieRepository @Inject constructor() : MovieRepository {
             reviewCount = "400K",
             ageRating = "PG-13",
             description = "Paul Atreides unites with Chani and the Fremen while on a warpath of revenge against the conspirators who destroyed his family.",
-            posterRes = 0,
+            posterRes = 4,
             isTopRated = true
         ),
         Movie(
@@ -84,7 +84,7 @@ class MockMovieRepository @Inject constructor() : MovieRepository {
             reviewCount = "2M",
             ageRating = "R",
             description = "The aging patriarch of an organized crime dynasty transfers control of his clandestine empire to his reluctant son.",
-            posterRes = 0,
+            posterRes = 5,
             isTopRated = true
         )
     )

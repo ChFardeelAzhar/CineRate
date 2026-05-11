@@ -1,5 +1,7 @@
 package com.example.cinerate.ui.components
 
+import androidx.compose.foundation.Image
+import com.example.cinerate.R
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -12,8 +14,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import coil.compose.AsyncImage
 import com.example.cinerate.data.model.Movie
 import com.example.cinerate.ui.theme.CardSurface
 import com.example.cinerate.ui.theme.SecondaryText
@@ -24,6 +29,16 @@ fun MovieCard(
     onClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
+
+    val imageRes = when(movie.posterRes){
+        0 -> R.drawable.movie
+        1 -> R.drawable.movie_2
+        2 -> R.drawable.movie_3
+        3 -> R.drawable.movie_2
+        4 -> R.drawable.movie
+        5 -> R.drawable.movie_3
+        else -> R.drawable.movie
+    }
     Row(
         modifier = modifier
             .fillMaxWidth()
@@ -45,7 +60,13 @@ fun MovieCard(
                 ),
             contentAlignment = Alignment.Center
         ) {
-             Text("🎬", style = MaterialTheme.typography.titleLarge)
+
+            Image(
+                painter = painterResource(imageRes),
+                contentDescription = "movie",
+                modifier = Modifier.fillMaxSize(),
+                contentScale = ContentScale.Crop
+            )
         }
 
         Spacer(modifier = Modifier.width(16.dp))
@@ -60,9 +81,9 @@ fun MovieCard(
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis
             )
-            
+
             Spacer(modifier = Modifier.height(4.dp))
-            
+
             GenrePill(genre = movie.genre.first())
 
             Spacer(modifier = Modifier.height(8.dp))
