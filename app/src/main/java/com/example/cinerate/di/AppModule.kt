@@ -1,5 +1,7 @@
 package com.example.cinerate.di
 
+import com.example.cinerate.data.repository.AuthRepository
+import com.example.cinerate.data.repository.MockAuthRepository
 import com.example.cinerate.data.repository.MockMovieRepository
 import com.example.cinerate.data.repository.MovieRepository
 import dagger.Binds
@@ -17,4 +19,10 @@ abstract class AppModule {
     abstract fun bindMovieRepository(
         mockMovieRepository: MockMovieRepository
     ): MovieRepository
+
+    @Binds
+    @Singleton
+    abstract fun bindAuthRepository(
+        mockAuthRepository: MockAuthRepository
+    ): AuthRepository
 }

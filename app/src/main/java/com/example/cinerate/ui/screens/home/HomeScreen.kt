@@ -3,6 +3,7 @@ package com.example.cinerate.ui.screens.home
 import androidx.compose.foundation.Image
 import com.example.cinerate.R
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
@@ -20,6 +21,9 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.cinerate.ui.components.GenreChip
 import com.example.cinerate.ui.components.MovieCard
@@ -32,6 +36,7 @@ import com.example.cinerate.ui.theme.SecondaryText
 @Composable
 fun HomeScreen(
     onMovieClick: (Int) -> Unit,
+    onLogout: () -> Unit,
     viewModel: HomeViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsState()
@@ -49,9 +54,9 @@ fun HomeScreen(
                             contentAlignment = Alignment.Center
                         ) {
                             Image(
-                                painter = painterResource(id = R.drawable.film_strip_),
+                                painter = painterResource(id = R.drawable.movie_frame),
                                 contentDescription = "App Logo",
-                                modifier = Modifier.size(22.dp)
+                                modifier = Modifier.size(20.dp)
                             )
                         }
                         Spacer(modifier = Modifier.width(12.dp))
@@ -60,6 +65,32 @@ fun HomeScreen(
                             style = MaterialTheme.typography.titleLarge,
                             color = Color.White
                         )
+                    }
+                },
+                actions = {
+                    if (uiState.currentUser != null) {
+                        Box(
+                            modifier = Modifier
+                                .padding(end = 8.dp)
+                                .size(32.dp)
+                                .clip(CircleShape)
+                                .background(GoldAccent)
+                                .clickable { onLogout() },
+                            contentAlignment = Alignment.Center
+                        ) {
+                            val initials = uiState.currentUser?.fullName?.split(" ")
+                                ?.mapNotNull { it.firstOrNull()?.toString() }
+                                ?.take(2)
+                                ?.joinToString("") ?: ""
+                            Text(
+                                text = initials,
+                                style = MaterialTheme.typography.labelSmall.copy(
+                                    fontWeight = FontWeight.Bold,
+                                    fontSize = 12.sp
+                                ),
+                                color = Color.Black
+                            )
+                        }
                     }
                 },
                 colors = TopAppBarDefaults.topAppBarColors(containerColor = Background)

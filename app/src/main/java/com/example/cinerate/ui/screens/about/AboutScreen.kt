@@ -1,5 +1,7 @@
 package com.example.cinerate.ui.screens.about
 
+import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -10,15 +12,21 @@ import androidx.compose.material.icons.rounded.School
 import androidx.compose.material.icons.rounded.Work
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
+import com.example.cinerate.R
 import com.example.cinerate.ui.components.TeamMemberRow
 import com.example.cinerate.ui.theme.Background
 import com.example.cinerate.ui.theme.CardSurface
@@ -26,7 +34,13 @@ import com.example.cinerate.ui.theme.GoldAccent
 import com.example.cinerate.ui.theme.SecondaryText
 
 @Composable
-fun AboutScreen() {
+fun AboutScreen(
+    onNavigateToLogin: () -> Unit,
+    onLogout: () -> Unit,
+    viewModel: AboutViewModel = hiltViewModel()
+) {
+    val uiState by viewModel.uiState.collectAsState()
+
     Scaffold(
         containerColor = Background
     ) { innerPadding ->
@@ -48,7 +62,11 @@ fun AboutScreen() {
                         .background(GoldAccent),
                     contentAlignment = Alignment.Center
                 ) {
-                    Text("🎞️", fontSize = 48.sp)
+                    Image(
+                        painter = painterResource(id = R.drawable.movie_frame),
+                        contentDescription = "App Logo",
+                        modifier = Modifier.size(55.dp)
+                    )
                 }
 
                 Spacer(modifier = Modifier.height(24.dp))
@@ -121,7 +139,46 @@ fun AboutScreen() {
                     description = "Hochschule Rhein-Waal\nDistributed Systems Project"
                 )
                 
-                Spacer(modifier = Modifier.height(32.dp))
+                Spacer(modifier = Modifier.height(16.dp))
+            }
+
+            // Auth Section
+            item {
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(vertical = 16.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    if (uiState.currentUser != null) {
+                        Text(
+                            text = "Logged in as ${uiState.currentUser?.fullName}",
+                            style = MaterialTheme.typography.bodyMedium,
+                            color = SecondaryText
+                        )
+                        Spacer(modifier = Modifier.height(12.dp))
+                        OutlinedButton(
+                            onClick = onLogout,
+                            modifier = Modifier.fillMaxWidth().height(52.dp),
+                            shape = RoundedCornerShape(12.dp),
+                            border = BorderStroke(1.dp, GoldAccent),
+                            colors = ButtonDefaults.outlinedButtonColors(contentColor = GoldAccent)
+                        ) {
+                            Text("Logout", style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold))
+                        }
+                    } else {
+                        Button(
+                            onClick = onNavigateToLogin,
+                            modifier = Modifier.fillMaxWidth().height(52.dp),
+                            shape = RoundedCornerShape(12.dp),
+                            colors = ButtonDefaults.buttonColors(containerColor = GoldAccent, contentColor = Color.Black)
+                        ) {
+                            Text("Login", style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold))
+                        }
+                    }
+                }
+                
+                Spacer(modifier = Modifier.height(8.dp))
                 
                 // Version Info
                 Text(
@@ -132,7 +189,6 @@ fun AboutScreen() {
                     modifier = Modifier.fillMaxWidth()
                 )
                 
-                Spacer(modifier = Modifier.height(16.dp))
             }
         }
     }

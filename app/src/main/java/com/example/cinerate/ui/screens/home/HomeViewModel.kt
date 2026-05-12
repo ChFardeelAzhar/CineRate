@@ -1,8 +1,9 @@
 package com.example.cinerate.ui.screens.home
 
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
 import com.example.cinerate.data.model.Movie
+import com.example.cinerate.data.model.User
+import com.example.cinerate.data.repository.AuthRepository
 import com.example.cinerate.data.repository.MovieRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.*
@@ -13,25 +14,29 @@ data class HomeUiState(
     val filteredMovies: List<Movie> = emptyList(),
     val genres: List<String> = emptyList(),
     val selectedGenre: String = "All",
-    val searchQuery: String = ""
+    val searchQuery: String = "",
+    val currentUser: User? = null
 )
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
-    private val repository: MovieRepository
+    private val movieRepository: MovieRepository,
+    private val authRepository: AuthRepository
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(HomeUiState())
     val uiState: StateFlow<HomeUiState> = _uiState.asStateFlow()
 
     init {
-        val movies = repository.getAllMovies()
-        val genres = repository.getGenres()
+        val movies = movieRepository.getAllMovies()
+        val genres = movieRepository.getGenres()
+        val user = authRepository.getCurrentUser()
         _uiState.update { 
             it.copy(
                 movies = movies, 
                 filteredMovies = movies,
-                genres = genres
+                genres = genres,
+                currentUser = user
             ) 
         }
     }
