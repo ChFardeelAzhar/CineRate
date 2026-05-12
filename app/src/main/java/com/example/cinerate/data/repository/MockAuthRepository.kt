@@ -34,7 +34,6 @@ class MockAuthRepository @Inject constructor() : AuthRepository {
             passwordHash = password
         )
         users.add(newUser)
-        currentUser = newUser
         return Result.success(newUser)
     }
 
