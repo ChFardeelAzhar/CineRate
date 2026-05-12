@@ -30,7 +30,7 @@ import com.example.cinerate.ui.theme.GoldAccent
 import com.example.cinerate.ui.theme.SecondaryText
 
 @Composable
-fun CineRateNavGraph(
+fun BingeBoardNavGraph(
     authRepository: AuthRepository
 ) {
     val navController = rememberNavController()

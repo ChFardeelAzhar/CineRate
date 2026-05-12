@@ -24,7 +24,7 @@ private val DarkColorScheme = darkColorScheme(
 )
 
 @Composable
-fun CineRateTheme(
+fun BingeBoardTheme(
     darkTheme: Boolean = true, // Force dark theme as per design
     content: @Composable () -> Unit
 ) {
