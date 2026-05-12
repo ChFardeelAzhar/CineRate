@@ -81,7 +81,7 @@ fun LoginScreen(
         Spacer(modifier = Modifier.height(16.dp))
         
         Text(
-            text = "CineRate",
+            text = "BingeBoard",
             style = MaterialTheme.typography.titleLarge.copy(fontSize = 24.sp),
             color = PrimaryText
         )

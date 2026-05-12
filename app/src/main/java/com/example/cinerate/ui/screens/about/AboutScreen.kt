@@ -72,7 +72,7 @@ fun AboutScreen(
                 Spacer(modifier = Modifier.height(24.dp))
 
                 Text(
-                    text = "CineRate",
+                    text = "BingeBoard",
                     style = MaterialTheme.typography.titleLarge.copy(fontSize = 24.sp),
                     color = Color.White
                 )
@@ -95,7 +95,7 @@ fun AboutScreen(
                 AboutInfoCard(
                     icon = Icons.Rounded.Info,
                     title = "About This App",
-                    description = "CineRate is a movie discovery and rating platform designed to help users explore, review, and track their favorite films. Built with a focus on clean UI and intuitive navigation for the modern cinephile."
+                    description = "BingeBoard is a movie discovery and rating platform designed to help users explore, review, and track their favorite films. Built with a focus on clean UI and intuitive navigation for the modern cinephile."
                 )
                 
                 Spacer(modifier = Modifier.height(16.dp))

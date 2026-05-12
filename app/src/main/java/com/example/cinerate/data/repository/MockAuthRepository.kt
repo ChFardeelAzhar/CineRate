@@ -8,7 +8,7 @@ import javax.inject.Singleton
 class MockAuthRepository @Inject constructor() : AuthRepository {
 
     private val users = mutableListOf(
-        User(1, "Test User", "test@cinerate.com", "test123")
+        User(1, "Test User", "test@bingeboard.com", "test123")
     )
 
     private var currentUser: User? = null

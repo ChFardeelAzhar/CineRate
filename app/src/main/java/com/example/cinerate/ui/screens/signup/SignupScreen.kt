@@ -51,7 +51,7 @@ fun SignupScreen(
 
     LaunchedEffect(uiState.isSuccess) {
         if (uiState.isSuccess) {
-            onNavigateToHome()
+            onNavigateToLogin()
         }
     }
 
@@ -85,7 +85,7 @@ fun SignupScreen(
         Spacer(modifier = Modifier.height(16.dp))
         
         Text(
-            text = "CineRate",
+            text = "BingeBoard",
             style = MaterialTheme.typography.titleLarge.copy(fontSize = 24.sp),
             color = PrimaryText
         )

@@ -61,7 +61,7 @@ fun HomeScreen(
                         }
                         Spacer(modifier = Modifier.width(12.dp))
                         Text(
-                            "CineRate",
+                            "BingeBoard",
                             style = MaterialTheme.typography.titleLarge,
                             color = Color.White
                         )

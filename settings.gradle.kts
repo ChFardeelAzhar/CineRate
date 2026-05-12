@@ -22,5 +22,5 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "CineRate"
+rootProject.name = "BingeBoard"
 include(":app")
