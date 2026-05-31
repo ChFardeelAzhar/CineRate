@@ -1,5 +1,7 @@
 package com.example.cinerate.ui.navigation
 
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Home
@@ -7,9 +9,11 @@ import androidx.compose.material.icons.rounded.Info
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.produceState
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
@@ -28,6 +32,7 @@ import com.example.cinerate.ui.screens.signup.SignupScreen
 import com.example.cinerate.ui.theme.Background
 import com.example.cinerate.ui.theme.GoldAccent
 import com.example.cinerate.ui.theme.SecondaryText
+import kotlinx.coroutines.launch
 
 @Composable
 fun BingeBoardNavGraph(
@@ -37,86 +42,103 @@ fun BingeBoardNavGraph(
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentDestination = navBackStackEntry?.destination
 
-    // Determine start destination
-    val startDestination = if (authRepository.isLoggedIn()) Screen.Home.route else Screen.Login.route
+    val scope = rememberCoroutineScope()
 
-    // Hide bottom bar on Login, Signup, and Detail screens
-    val showBottomBar = currentDestination?.route in listOf(Screen.Home.route, Screen.About.route)
+    // Determine start destination asynchronously
+    val isLoggedInState = produceState<Boolean?>(initialValue = null) {
+        value = authRepository.isLoggedIn()
+    }
 
-    Scaffold(
-        bottomBar = {
-            if (showBottomBar) {
-                BottomBar(navController = navController)
-            }
-        },
-        containerColor = Background
-    ) { innerPadding ->
-        NavHost(
-            navController = navController,
-            startDestination = startDestination,
-            modifier = Modifier.padding(innerPadding)
-        ) {
-            composable(Screen.Login.route) {
-                LoginScreen(
-                    onNavigateToHome = {
-                        navController.navigate(Screen.Home.route) {
-                            popUpTo(0) { inclusive = true }
-                        }
-                    },
-                    onNavigateToSignup = {
-                        navController.navigate(Screen.Signup.route)
-                    }
-                )
-            }
-            composable(Screen.Signup.route) {
-                SignupScreen(
-                    onNavigateToHome = {
-                        navController.navigate(Screen.Home.route) {
-                            popUpTo(0) { inclusive = true }
-                        }
-                    },
-                    onNavigateToLogin = {
-                        navController.navigate(Screen.Login.route) {
-                            popUpTo(Screen.Login.route) { inclusive = true }
-                        }
-                    }
-                )
-            }
-            composable(Screen.Home.route) {
-                HomeScreen(
-                    onMovieClick = { movieId ->
-                        navController.navigate(Screen.Detail.createRoute(movieId))
-                    },
-                    onLogout = {
-                        authRepository.logout()
-                        navController.navigate(Screen.Login.route) {
-                            popUpTo(0) { inclusive = true }
-                        }
-                    }
-                )
-            }
-            composable(
-                route = Screen.Detail.route,
-                arguments = listOf(navArgument("movieId") { type = NavType.IntType })
+    if (isLoggedInState.value == null) {
+        // Show a simple loading screen while checking auth status
+        Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+            CircularProgressIndicator(color = GoldAccent)
+        }
+    } else {
+        val startDestination = if (isLoggedInState.value == true) Screen.Home.route else Screen.Login.route
+
+        // Hide bottom bar on Login, Signup, and Detail screens
+        val showBottomBar = currentDestination?.route in listOf(Screen.Home.route, Screen.About.route)
+
+        Scaffold(
+            bottomBar = {
+                if (showBottomBar) {
+                    BottomBar(navController = navController)
+                }
+            },
+            containerColor = Background
+        ) { innerPadding ->
+            NavHost(
+                navController = navController,
+                startDestination = startDestination,
+                modifier = Modifier.padding(innerPadding)
             ) {
-                DetailScreen(
-                    onBackClick = { navController.popBackStack() }
-                )
-            }
-            composable(Screen.About.route) {
-                AboutScreen(
-                    onNavigateToLogin = {
-                        navController.navigate(Screen.Login.route) {
-                            popUpTo(0) { inclusive = true }
+                composable(Screen.Login.route) {
+                    LoginScreen(
+                        onNavigateToHome = {
+                            navController.navigate(Screen.Home.route) {
+                                popUpTo(0) { inclusive = true }
+                            }
+                        },
+                        onNavigateToSignup = {
+                            navController.navigate(Screen.Signup.route)
                         }
-                    },
-                    onLogout = {
-                        authRepository.logout()
-                        navController.navigate(Screen.Login.route) {
-                            popUpTo(0) { inclusive = true }
+                    )
+                }
+                composable(Screen.Signup.route) {
+                    SignupScreen(
+                        onNavigateToHome = {
+                            navController.navigate(Screen.Home.route) {
+                                popUpTo(0) { inclusive = true }
+                            }
+                        },
+                        onNavigateToLogin = {
+                            navController.navigate(Screen.Login.route) {
+                                popUpTo(Screen.Login.route) { inclusive = true }
+                            }
                         }
-                    }
-                )
+                    )
+                }
+                composable(Screen.Home.route) {
+                    HomeScreen(
+                        onMovieClick = { movieId ->
+                            navController.navigate(Screen.Detail.createRoute(movieId))
+                        },
+                        onLogout = {
+                            scope.launch {
+                                authRepository.logout()
+                                navController.navigate(Screen.Login.route) {
+                                    popUpTo(0) { inclusive = true }
+                                }
+                            }
+                        }
+                    )
+                }
+                composable(
+                    route = Screen.Detail.route,
+                    arguments = listOf(navArgument("movieId") { type = NavType.IntType })
+                ) {
+                    DetailScreen(
+                        onBackClick = { navController.popBackStack() }
+                    )
+                }
+                composable(Screen.About.route) {
+                    AboutScreen(
+                        onNavigateToLogin = {
+                            navController.navigate(Screen.Login.route) {
+                                popUpTo(0) { inclusive = true }
+                            }
+                        },
+                        onLogout = {
+                            scope.launch {
+                                authRepository.logout()
+                                navController.navigate(Screen.Login.route) {
+                                    popUpTo(0) { inclusive = true }
+                                }
+                            }
+                        }
+                    )
+                }
             }
         }
     }
