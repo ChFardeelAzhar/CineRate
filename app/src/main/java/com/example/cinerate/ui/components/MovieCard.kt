@@ -60,13 +60,21 @@ fun MovieCard(
                 ),
             contentAlignment = Alignment.Center
         ) {
-
-            Image(
-                painter = painterResource(imageRes),
-                contentDescription = "movie",
-                modifier = Modifier.fillMaxSize(),
-                contentScale = ContentScale.Crop
-            )
+            if (movie.posterUrl.isNotEmpty()) {
+                AsyncImage(
+                    model = movie.posterUrl,
+                    contentDescription = movie.title,
+                    modifier = Modifier.fillMaxSize(),
+                    contentScale = ContentScale.Crop
+                )
+            } else {
+                Image(
+                    painter = painterResource(imageRes),
+                    contentDescription = "movie",
+                    modifier = Modifier.fillMaxSize(),
+                    contentScale = ContentScale.Crop
+                )
+            }
         }
 
         Spacer(modifier = Modifier.width(16.dp))

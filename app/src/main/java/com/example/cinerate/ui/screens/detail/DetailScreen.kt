@@ -23,6 +23,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import coil.compose.AsyncImage
 import com.example.cinerate.R
 import com.example.cinerate.ui.components.*
 import com.example.cinerate.ui.theme.Background
@@ -73,12 +74,21 @@ fun DetailScreen(
                         ),
                         contentAlignment = Alignment.Center
                     ) {
-                        Image(
-                            painter = painterResource(imageRes),
-                            contentDescription = "movie",
-                            modifier = Modifier.fillMaxSize(),
-                            contentScale = ContentScale.Crop
-                        )
+                        if (movie.posterUrl.isNotEmpty()) {
+                            AsyncImage(
+                                model = movie.posterUrl,
+                                contentDescription = movie.title,
+                                modifier = Modifier.fillMaxSize(),
+                                contentScale = ContentScale.Crop
+                            )
+                        } else {
+                            Image(
+                                painter = painterResource(imageRes),
+                                contentDescription = "movie",
+                                modifier = Modifier.fillMaxSize(),
+                                contentScale = ContentScale.Crop
+                            )
+                        }
 
                     }
                 }
