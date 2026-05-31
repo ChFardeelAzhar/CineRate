@@ -74,8 +74,7 @@ fun HomeScreen(
                                 .padding(end = 8.dp)
                                 .size(32.dp)
                                 .clip(CircleShape)
-                                .background(GoldAccent)
-                                .clickable { onLogout() },
+                                .background(GoldAccent),
                             contentAlignment = Alignment.Center
                         ) {
                             val initials = uiState.currentUser?.fullName?.split(" ")
